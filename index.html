@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love App 💖</title>
+<link rel="manifest" href="manifest.json">
+
+<style>
+body{
+    margin:0;
+    font-family:sans-serif;
+    background:#000;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* Intro cinematic */
+#intro{
+    position:fixed;
+    width:100%;
+    height:100%;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:30px;
+    animation:fade 3s forwards;
+    z-index:9999;
+}
+@keyframes fade{0%{opacity:1;}100%{opacity:0;visibility:hidden;}}
+
+/* Navbar */
+nav{
+    position:fixed;
+    width:100%;
+    background:rgba(0,0,0,0.7);
+    padding:10px;
+    text-align:center;
+}
+nav button{
+    margin:5px;
+    padding:10px;
+    border:none;
+    background:#ff2e63;
+    color:white;
+    border-radius:10px;
+}
+
+/* Sections */
+section{display:none;padding-top:80px;text-align:center;}
+.active{display:block;}
+
+/* Chat */
+#chatBox{max-height:300px;overflow-y:auto;}
+.msg{margin:5px;padding:10px;border-radius:10px;}
+.me{background:#ff2e63;}
+.ai{background:#333;}
+
+/* Game */
+#gameArea{height:300px;border:2px solid white;position:relative;}
+.heart{position:absolute;font-size:25px;cursor:pointer;}
+
+/* Surprise */
+#surpriseText{font-size:25px;animation:zoom 1s;}
+@keyframes zoom{from{transform:scale(0);}to{transform:scale(1);}}
+</style>
+</head>
+
+<body>
+
+<div id="intro">💖 Loading Our Love... 💖</div>
+
+<nav>
+<button onclick="show('home')">Home</button>
+<button onclick="show('login')">Login</button>
+<button onclick="show('chat')">Chat</button>
+<button onclick="show('game')">Game</button>
+<button onclick="show('map')">Map</button>
+<button onclick="show('surprise')">Surprise</button>
+</nav>
+
+<section id="home" class="active">
+<h1>💖 Welcome My Love 💖</h1>
+<button onclick="speakLove()">🔊 Say Love</button>
+</section>
+
+<section id="login">
+<h2>🔐 Private Access</h2>
+<input id="user" placeholder="Name"><br><br>
+<input id="pass" type="password" placeholder="Code"><br><br>
+<button onclick="login()">Enter</button>
+<p id="loginMsg"></p>
+</section>
+
+<section id="chat">
+<h2>💬 Smart Chat</h2>
+<div id="chatBox"></div>
+<input id="inputMsg">
+<button onclick="send()">Send</button>
+</section>
+
+<section id="game">
+<h2>🎮 Love Game Levels</h2>
+<div id="gameArea"></div>
+<p>Score: <span id="score">0</span></p>
+</section>
+
+<section id="map">
+<h2>🌍 Our First Meeting</h2>
+<iframe width="90%" height="300"
+src="https://maps.google.com/maps?q=Anassi%20Casablanca%20Mosquee%20Al%20Andalous&output=embed">
+</iframe>
+</section>
+
+<section id="surprise">
+<h2>🎁 Surprise</h2>
+<button onclick="surprise()">Open</button>
+<p id="surpriseText"></p>
+</section>
+
+<script>
+
+/* Navigation */
+function show(id){
+    document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+/* Voice */
+function speakLove(){
+    let msg=new SpeechSynthesisUtterance("I love you forever");
+    speechSynthesis.speak(msg);
+}
+
+/* Login */
+function login(){
+    let u=document.getElementById("user").value;
+    let p=document.getElementById("pass").value;
+    if(u==="ilyass" && p==="1234"){
+        document.getElementById("loginMsg").innerText="💖 Welcome!";
+        show("chat");
+    }else{
+        document.getElementById("loginMsg").innerText="❌ Wrong";
+    }
+}
+
+/* Chat */
+function send(){
+    let input=document.getElementById("inputMsg").value;
+    let box=document.getElementById("chatBox");
+
+    box.innerHTML+=`<div class="msg me">${input}</div>`;
+
+    let replies=["I love you 💖","You are my life 🌍","Forever ❤️","Miss you 😘"];
+    let r=replies[Math.floor(Math.random()*replies.length)];
+
+    setTimeout(()=>{
+        box.innerHTML+=`<div class="msg ai">${r}</div>`;
+        box.scrollTop=box.scrollHeight;
+    },800);
+}
+
+/* Game levels */
+let score=0;
+let speed=5;
+
+setInterval(()=>{
+    let h=document.createElement("div");
+    h.className="heart";
+    h.innerHTML="❤️";
+    h.style.left=Math.random()*90+"%";
+    h.style.top="0px";
+    document.getElementById("gameArea").appendChild(h);
+
+    let fall=setInterval(()=>{
+        h.style.top=parseInt(h.style.top)+speed+"px";
+    },50);
+
+    h.onclick=()=>{
+        score++;
+        document.getElementById("score").innerText=score;
+        h.remove();
+        clearInterval(fall);
+
+        if(score%10==0){
+            speed+=2; // level up
+        }
+    }
+
+    setTimeout(()=>{h.remove();clearInterval(fall);},3000);
+},700);
+
+/* Surprise */
+function surprise(){
+    document.getElementById("surpriseText").innerHTML="💖 YOU ARE MY LIFE 💖";
+}
+
+/* PWA */
+if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("sw.js");
+}
+
+</script>
+
+</body>
+</html>
