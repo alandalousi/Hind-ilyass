@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Our Love 💖</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#0f0f0f;
+    color:white;
+    text-align:center;
+}
+
+/* Navbar */
+nav{
+    position:fixed;
+    top:0;
+    width:100%;
+    background:#111;
+    padding:10px;
+    z-index:999;
+}
+nav button{
+    margin:5px;
+    padding:10px;
+    border:none;
+    background:#ff2e63;
+    color:white;
+    cursor:pointer;
+}
+
+/* Sections */
+section{
+    display:none;
+    padding:80px 20px;
+}
+.active{
+    display:block;
+}
+
+/* Hearts Background */
+.heart{
+    position:fixed;
+    color:red;
+    animation:fall 5s linear infinite;
+}
+@keyframes fall{
+    0%{top:-10%; left:random;}
+    100%{top:100%;}
+}
+
+/* Gallery */
+.gallery img{
+    width:150px;
+    margin:10px;
+    border-radius:10px;
+    transition:0.3s;
+}
+.gallery img:hover{
+    transform:scale(1.2);
+}
+
+/* Button Love */
+.love-btn{
+    padding:15px 30px;
+    font-size:20px;
+    background:red;
+    border:none;
+    cursor:pointer;
+}
+
+/* Game */
+#game{
+    height:300px;
+    position:relative;
+    border:2px solid white;
+}
+.heartGame{
+    position:absolute;
+    font-size:30px;
+    cursor:pointer;
+}
+
+/* Countdown */
+#countdown{
+    font-size:30px;
+    color:#ff2e63;
+}
+</style>
+
+</head>
+
+<body>
+
+<nav>
+<button onclick="show('home')">Home</button>
+<button onclick="show('story')">Story</button>
+<button onclick="show('secret')">Secret</button>
+<button onclick="show('game')">Game</button>
+<button onclick="show('map')">Map</button>
+<button onclick="show('countdownS')">Countdown</button>
+<button onclick="show('gallery')">Gallery</button>
+</nav>
+
+<!-- HOME -->
+<section id="home" class="active">
+<h1>💖 Welcome My Love 💖</h1>
+<button class="love-btn" onclick="alert('I LOVE YOU ❤️')">Click Me</button>
+</section>
+
+<!-- STORY -->
+<section id="story">
+<h2>📖 Our Story</h2>
+<p>💑 First time we met...</p>
+<p>💖 First message...</p>
+<p>🔥 Best moments together...</p>
+</section>
+
+<!-- SECRET -->
+<section id="secret">
+<h2>🔒 Secret</h2>
+<input type="password" id="pass" placeholder="Enter code">
+<button onclick="checkPass()">Enter</button>
+<p id="msg"></p>
+</section>
+
+<!-- GAME -->
+<section id="gameSection">
+<h2>🎮 Catch Hearts</h2>
+<div id="game"></div>
+<p>Score: <span id="score">0</span></p>
+</section>
+
+<!-- MAP -->
+<section id="map">
+<h2>🌍 Our Memories Map</h2>
+<p>📍 Casablanca - First date</p>
+<p>📍 Another place...</p>
+</section>
+
+<!-- COUNTDOWN -->
+<section id="countdownS">
+<h2>⏳ Countdown</h2>
+<div id="countdown"></div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+<h2>📸 Our Photos</h2>
+<div class="gallery">
+<img src="https://via.placeholder.com/150">
+<img src="https://via.placeholder.com/150">
+<img src="https://via.placeholder.com/150">
+</div>
+</section>
+
+<script>
+
+/* Navigation */
+function show(id){
+    document.querySelectorAll("section").forEach(s=>s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+}
+
+/* Secret */
+function checkPass(){
+    let p = document.getElementById("pass").value;
+    if(p=="1234"){
+        document.getElementById("msg").innerHTML="💌 I love you so much!";
+    }else{
+        document.getElementById("msg").innerHTML="❌ Wrong code";
+    }
+}
+
+/* Game */
+let score=0;
+setInterval(()=>{
+    let heart=document.createElement("div");
+    heart.className="heartGame";
+    heart.innerHTML="❤️";
+    heart.style.left=Math.random()*90+"%";
+    heart.style.top="0px";
+    document.getElementById("game").appendChild(heart);
+
+    let fall=setInterval(()=>{
+        heart.style.top=parseInt(heart.style.top)+5+"px";
+    },50);
+
+    heart.onclick=()=>{
+        score++;
+        document.getElementById("score").innerText=score;
+        heart.remove();
+        clearInterval(fall);
+    }
+
+    setTimeout(()=>{
+        heart.remove();
+        clearInterval(fall);
+    },3000);
+
+},1000);
+
+/* Countdown */
+let target=new Date("2026-12-31").getTime();
+setInterval(()=>{
+    let now=new Date().getTime();
+    let diff=target-now;
+
+    let d=Math.floor(diff/(1000*60*60*24));
+    let h=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+    let m=Math.floor((diff%(1000*60*60))/(1000*60));
+    let s=Math.floor((diff%(1000*60))/1000);
+
+    document.getElementById("countdown").innerHTML=
+    d+"d "+h+"h "+m+"m "+s+"s";
+},1000);
+
+</script>
+
+</body>
+</html>
