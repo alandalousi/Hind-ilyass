@@ -1,0 +1,8 @@
+{
+  "name":"Love App",
+  "short_name":"Love",
+  "start_url":"index.html",
+  "display":"standalone",
+  "background_color":"#000",
+  "theme_color":"#ff2e63"
+}
